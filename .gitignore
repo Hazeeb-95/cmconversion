@@ -1,0 +1,11 @@
+.env
+*.pem
+.venv/
+log/
+media/
+__pycache__/
+deployment_guide.md
+*.json
+*.md
+*.sh
+*.sqlite3

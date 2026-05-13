@@ -1,0 +1,38 @@
+# .dockerignore
+
+# Python
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+**/*.egg-info/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Django
+**/*.sqlite3
+**/media/
+**/staticfiles/
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile
+docker-compose*.yml
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+logs/
+
+# Vercel
+vercel.json
+pyproject.toml
