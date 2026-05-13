@@ -1,3 +1,0 @@
--r base.txt
-
-supabase>=2.28.2
