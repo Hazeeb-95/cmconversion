@@ -24,14 +24,14 @@ export class Group {
   @JoinColumn({ name: 'course_id' })
   course!: Course | null;
 
-  @Column({ name: 'course_id', nullable: true })
+  @Column({ type: 'int', name: 'course_id', nullable: true })
   courseId!: number | null;
 
   @ManyToOne(() => User, { onDelete: 'SET NULL', nullable: true })
   @JoinColumn({ name: 'created_by_id' })
   createdBy!: User | null;
 
-  @Column({ name: 'created_by_id', nullable: true })
+  @Column({ type: 'int', name: 'created_by_id', nullable: true })
   createdById!: number | null;
 
   @ManyToMany(() => User, { eager: false })

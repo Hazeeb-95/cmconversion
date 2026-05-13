@@ -66,14 +66,14 @@ export class Application {
   @JoinColumn({ name: 'assigned_financier_id' })
   assignedFinancier!: User | null;
 
-  @Column({ name: 'assigned_financier_id', nullable: true })
+  @Column({ type: 'int', name: 'assigned_financier_id', nullable: true })
   assignedFinancierId!: number | null;
 
   @ManyToOne(() => User, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'assigned_trainer_id' })
   assignedTrainer!: User | null;
 
-  @Column({ name: 'assigned_trainer_id', nullable: true })
+  @Column({ type: 'int', name: 'assigned_trainer_id', nullable: true })
   assignedTrainerId!: number | null;
 
   @Column({ name: 'public_notes', nullable: true, type: 'text' })

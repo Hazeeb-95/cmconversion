@@ -27,7 +27,7 @@ export class TrainerProfile {
   @Column({ nullable: true })
   specialization!: string | null;
 
-  @Column({ name: 'experience_years', nullable: true })
+  @Column({ type: 'int', name: 'experience_years', nullable: true })
   experienceYears!: number | null;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })

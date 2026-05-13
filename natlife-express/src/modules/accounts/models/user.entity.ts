@@ -59,21 +59,21 @@ export class User {
   @JoinColumn({ name: 'region_id' })
   region!: Region | null;
 
-  @Column({ name: 'region_id', nullable: true })
+  @Column({ type: 'int', name: 'region_id', nullable: true })
   regionId!: number | null;
 
   @ManyToOne(() => User, (user) => user.id, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'manager_id' })
   manager!: User | null;
 
-  @Column({ name: 'manager_id', nullable: true })
+  @Column({ type: 'int', name: 'manager_id', nullable: true })
   managerId!: number | null;
 
   @ManyToOne(() => User, (user) => user.id, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'created_by_id' })
   createdBy!: User | null;
 
-  @Column({ name: 'created_by_id', nullable: true })
+  @Column({ type: 'int', name: 'created_by_id', nullable: true })
   createdById!: number | null;
 
   @Column({ name: 'email_confirmation_token', nullable: true })

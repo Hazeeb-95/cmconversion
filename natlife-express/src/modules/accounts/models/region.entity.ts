@@ -16,7 +16,7 @@ export class Region {
   name!: string;
 
   // admin relation wired after User entity to avoid circular import
-  @Column({ nullable: true, name: 'admin_id' })
+  @Column({ type: 'int', nullable: true, name: 'admin_id' })
   adminId!: number | null;
 
   // pincodes is resolved via Pincode.region
