@@ -33,28 +33,28 @@ export class SHG {
   @Column({ type: 'enum', enum: BloodGroup, name: 'blood_group', nullable: true })
   bloodGroup!: BloodGroup | null;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   language!: string | null;
 
-  @Column({ name: 'address_line_1', nullable: true })
+  @Column({ type: 'varchar', name: 'address_line_1', nullable: true })
   addressLine1!: string | null;
 
-  @Column({ name: 'address_line_2', nullable: true })
+  @Column({ type: 'varchar', name: 'address_line_2', nullable: true })
   addressLine2!: string | null;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   district!: string | null;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   village!: string | null;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   state!: string | null;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   country!: string | null;
 
-  @Column({ nullable: true, length: 6 })
+  @Column({ type: 'varchar', nullable: true, length: 6 })
   pincode!: string | null;
 
   @Column({

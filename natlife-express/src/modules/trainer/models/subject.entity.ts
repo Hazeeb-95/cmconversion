@@ -25,9 +25,9 @@ export class Subject {
   @Column({ nullable: true, type: 'text' })
   description!: string | null;
 
-  @Column({ name: 'img_key', nullable: true })
+  @Column({ type: 'varchar', name: 'img_key', nullable: true })
   imgKey!: string | null;
 
-  @Column({ name: 'img_url', nullable: true })
+  @Column({ type: 'varchar', name: 'img_url', nullable: true })
   imgUrl!: string | null;
 }

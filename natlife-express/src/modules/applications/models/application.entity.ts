@@ -35,7 +35,7 @@ export class Application {
   })
   status!: ApplicationStatus;
 
-  @Column({ name: 'reference_number', unique: true, nullable: true })
+  @Column({ type: 'varchar', name: 'reference_number', unique: true, nullable: true })
   referenceNumber!: string | null;
 
   @Column({

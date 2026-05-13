@@ -30,13 +30,13 @@ export class SubjectMaterial {
   @Column({ type: 'enum', enum: MaterialDocumentType })
   type!: MaterialDocumentType;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   url!: string | null;
 
-  @Column({ name: 'file_key', nullable: true })
+  @Column({ type: 'varchar', name: 'file_key', nullable: true })
   fileKey!: string | null;
 
-  @Column({ name: 'file_url', nullable: true })
+  @Column({ type: 'varchar', name: 'file_url', nullable: true })
   fileUrl!: string | null;
 
   @Column({ type: 'int', name: 'file_size', nullable: true })

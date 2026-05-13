@@ -8,10 +8,10 @@ export class Contact {
   @Column()
   name!: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   organization!: string | null;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   city!: string | null;
 
   @Column()
@@ -20,7 +20,7 @@ export class Contact {
   @Column()
   email!: string;
 
-  @Column({ name: 'organization_type', nullable: true })
+  @Column({ type: 'varchar', name: 'organization_type', nullable: true })
   organizationType!: string | null;
 
   @Column({ nullable: true, type: 'text' })

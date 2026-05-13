@@ -22,11 +22,11 @@ export class User {
   @Index()
   phone!: string;
 
-  @Column({ unique: true, nullable: true })
+  @Column({ type: 'varchar', unique: true, nullable: true })
   @Index()
   email!: string | null;
 
-  @Column({ name: 'password_hash', nullable: true })
+  @Column({ type: 'varchar', name: 'password_hash', nullable: true })
   passwordHash!: string | null;
 
   @Column({ name: 'phone_verified', default: false })
@@ -76,16 +76,16 @@ export class User {
   @Column({ type: 'int', name: 'created_by_id', nullable: true })
   createdById!: number | null;
 
-  @Column({ name: 'email_confirmation_token', nullable: true })
+  @Column({ type: 'varchar', name: 'email_confirmation_token', nullable: true })
   emailConfirmationToken!: string | null;
 
   @Column({ name: 'email_confirmation_sent_at', type: 'timestamptz', nullable: true })
   emailConfirmationSentAt!: Date | null;
 
-  @Column({ name: 'refresh_token', nullable: true })
+  @Column({ type: 'varchar', name: 'refresh_token', nullable: true })
   refreshToken!: string | null;
 
-  @Column({ name: 'totp_secret', nullable: true })
+  @Column({ type: 'varchar', name: 'totp_secret', nullable: true })
   totpSecret!: string | null;
 
   @Column({ name: 'recovery_codes', type: 'jsonb', nullable: true })
