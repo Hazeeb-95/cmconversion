@@ -25,41 +25,22 @@ export class Application {
   @JoinColumn({ name: 'user_id' })
   user!: User;
 
-  @Column({ name: 'user_id' })
+  @Column({ type: 'int', name: 'user_id' })
   userId!: number;
 
-  @Column({
-    type: 'enum',
-    enum: ApplicationStatus,
-    default: ApplicationStatus.SUBMITTED,
-  })
+  @Column({ type: 'enum', enum: ApplicationStatus, default: ApplicationStatus.SUBMITTED })
   status!: ApplicationStatus;
 
-  @Column({ name: 'reference_number', unique: true, nullable: true })
+  @Column({ type: 'varchar', name: 'reference_number', unique: true, nullable: true })
   referenceNumber!: string | null;
 
-  @Column({
-    type: 'enum',
-    enum: PaymentType,
-    name: 'payment_type',
-    nullable: true,
-  })
+  @Column({ type: 'enum', enum: PaymentType, name: 'payment_type', nullable: true })
   paymentType!: PaymentType | null;
 
-  @Column({
-    type: 'enum',
-    enum: PaymentMethod,
-    name: 'payment_method',
-    nullable: true,
-  })
+  @Column({ type: 'enum', enum: PaymentMethod, name: 'payment_method', nullable: true })
   paymentMethod!: PaymentMethod | null;
 
-  @Column({
-    type: 'enum',
-    enum: PaymentClearance,
-    name: 'payment_status',
-    default: PaymentClearance.PENDING,
-  })
+  @Column({ type: 'enum', enum: PaymentClearance, name: 'payment_status', default: PaymentClearance.PENDING })
   paymentStatus!: PaymentClearance;
 
   @ManyToOne(() => User, { nullable: true, onDelete: 'SET NULL' })
@@ -76,10 +57,10 @@ export class Application {
   @Column({ type: 'int', name: 'assigned_trainer_id', nullable: true })
   assignedTrainerId!: number | null;
 
-  @Column({ name: 'public_notes', nullable: true, type: 'text' })
+  @Column({ type: 'text', name: 'public_notes', nullable: true })
   publicNotes!: string | null;
 
-  @Column({ name: 'private_notes', nullable: true, type: 'text' })
+  @Column({ type: 'text', name: 'private_notes', nullable: true })
   privateNotes!: string | null;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })

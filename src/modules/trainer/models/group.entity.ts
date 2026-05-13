@@ -17,7 +17,7 @@ export class Group {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column({ type: 'varchar' })
   name!: string;
 
   @ManyToOne(() => Course, { nullable: true, onDelete: 'SET NULL' })

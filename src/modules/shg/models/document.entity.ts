@@ -18,16 +18,16 @@ export class Document {
   @JoinColumn({ name: 'shg_id' })
   shg!: SHG;
 
-  @Column({ name: 'shg_id' })
+  @Column({ type: 'int', name: 'shg_id' })
   shgId!: number;
 
   @Column({ type: 'enum', enum: DocumentType, name: 'document_type' })
   documentType!: DocumentType;
 
-  @Column({ name: 'file_key' })
+  @Column({ type: 'varchar', name: 'file_key' })
   fileKey!: string;
 
-  @Column({ name: 'file_url' })
+  @Column({ type: 'varchar', name: 'file_url' })
   fileUrl!: string;
 
   @Column({ type: 'int', name: 'file_size', nullable: true })

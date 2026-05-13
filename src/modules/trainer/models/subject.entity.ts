@@ -16,18 +16,18 @@ export class Subject {
   @JoinColumn({ name: 'course_id' })
   course!: Course;
 
-  @Column({ name: 'course_id' })
+  @Column({ type: 'int', name: 'course_id' })
   courseId!: number;
 
-  @Column()
+  @Column({ type: 'varchar' })
   name!: string;
 
-  @Column({ nullable: true, type: 'text' })
+  @Column({ type: 'text', nullable: true })
   description!: string | null;
 
-  @Column({ name: 'img_key', nullable: true })
+  @Column({ type: 'varchar', name: 'img_key', nullable: true })
   imgKey!: string | null;
 
-  @Column({ name: 'img_url', nullable: true })
+  @Column({ type: 'varchar', name: 'img_url', nullable: true })
   imgUrl!: string | null;
 }

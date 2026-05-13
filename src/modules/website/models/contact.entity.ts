@@ -5,25 +5,25 @@ export class Contact {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column({ type: 'varchar' })
   name!: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   organization!: string | null;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   city!: string | null;
 
-  @Column()
+  @Column({ type: 'varchar' })
   phone!: string;
 
-  @Column()
+  @Column({ type: 'varchar' })
   email!: string;
 
-  @Column({ name: 'organization_type', nullable: true })
+  @Column({ type: 'varchar', name: 'organization_type', nullable: true })
   organizationType!: string | null;
 
-  @Column({ nullable: true, type: 'text' })
+  @Column({ type: 'text', nullable: true })
   description!: string | null;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })

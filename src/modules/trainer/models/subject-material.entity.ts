@@ -18,25 +18,25 @@ export class SubjectMaterial {
   @JoinColumn({ name: 'subject_id' })
   subject!: Subject;
 
-  @Column({ name: 'subject_id' })
+  @Column({ type: 'int', name: 'subject_id' })
   subjectId!: number;
 
-  @Column()
+  @Column({ type: 'varchar' })
   title!: string;
 
-  @Column({ nullable: true, type: 'text' })
+  @Column({ type: 'text', nullable: true })
   description!: string | null;
 
   @Column({ type: 'enum', enum: MaterialDocumentType })
   type!: MaterialDocumentType;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   url!: string | null;
 
-  @Column({ name: 'file_key', nullable: true })
+  @Column({ type: 'varchar', name: 'file_key', nullable: true })
   fileKey!: string | null;
 
-  @Column({ name: 'file_url', nullable: true })
+  @Column({ type: 'varchar', name: 'file_url', nullable: true })
   fileUrl!: string | null;
 
   @Column({ type: 'int', name: 'file_size', nullable: true })

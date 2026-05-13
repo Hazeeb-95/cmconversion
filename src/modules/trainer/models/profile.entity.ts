@@ -18,13 +18,13 @@ export class TrainerProfile {
   @JoinColumn({ name: 'user_id' })
   user!: User;
 
-  @Column({ name: 'user_id' })
+  @Column({ type: 'int', name: 'user_id' })
   userId!: number;
 
-  @Column({ nullable: true, type: 'text' })
+  @Column({ type: 'text', nullable: true })
   bio!: string | null;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   specialization!: string | null;
 
   @Column({ type: 'int', name: 'experience_years', nullable: true })

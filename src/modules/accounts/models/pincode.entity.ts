@@ -6,7 +6,7 @@ export class Pincode {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column({ unique: true, length: 6 })
+  @Column({ type: 'varchar', unique: true, length: 6 })
   @Index()
   code!: string;
 
@@ -14,6 +14,6 @@ export class Pincode {
   @JoinColumn({ name: 'region_id' })
   region!: Region;
 
-  @Column({ name: 'region_id' })
+  @Column({ type: 'int', name: 'region_id' })
   regionId!: number;
 }

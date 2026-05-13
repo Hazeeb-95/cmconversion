@@ -10,21 +10,21 @@ export class BankDetails {
   @JoinColumn({ name: 'shg_id' })
   shg!: SHG;
 
-  @Column({ name: 'shg_id' })
+  @Column({ type: 'int', name: 'shg_id' })
   shgId!: number;
 
-  @Column({ name: 'account_holder_name' })
+  @Column({ type: 'varchar', name: 'account_holder_name' })
   accountHolderName!: string;
 
-  @Column({ name: 'account_number' })
+  @Column({ type: 'varchar', name: 'account_number' })
   accountNumber!: string;
 
-  @Column({ name: 'bank_name' })
+  @Column({ type: 'varchar', name: 'bank_name' })
   bankName!: string;
 
-  @Column({ name: 'branch_name' })
+  @Column({ type: 'varchar', name: 'branch_name' })
   branchName!: string;
 
-  @Column({ name: 'ifsc_code', length: 11 })
+  @Column({ type: 'varchar', name: 'ifsc_code', length: 11 })
   ifscCode!: string;
 }

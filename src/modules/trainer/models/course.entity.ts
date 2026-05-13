@@ -3,7 +3,6 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
-  OneToMany,
   JoinColumn,
   CreateDateColumn,
 } from 'typeorm';
@@ -14,16 +13,16 @@ export class Course {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column({ type: 'varchar' })
   name!: string;
 
-  @Column({ nullable: true, type: 'text' })
+  @Column({ type: 'text', nullable: true })
   description!: string | null;
 
-  @Column({ name: 'img_key', nullable: true })
+  @Column({ type: 'varchar', name: 'img_key', nullable: true })
   imgKey!: string | null;
 
-  @Column({ name: 'img_url', nullable: true })
+  @Column({ type: 'varchar', name: 'img_url', nullable: true })
   imgUrl!: string | null;
 
   @ManyToOne(() => User, { onDelete: 'SET NULL', nullable: true })
