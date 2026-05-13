@@ -30,7 +30,8 @@ export class Document {
   @Column({ name: 'file_url' })
   fileUrl!: string;
 
-  @Column({ name: 'file_size', nullable: true })
+  @Column({ type: 'int', name: 'file_size', nullable: true })
+
   fileSize!: number | null;
 
   @Column({ type: 'enum', enum: DocumentStatus, default: DocumentStatus.PENDING })

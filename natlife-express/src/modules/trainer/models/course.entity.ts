@@ -30,7 +30,7 @@ export class Course {
   @JoinColumn({ name: 'created_by_id' })
   createdBy!: User | null;
 
-  @Column({ name: 'created_by_id', nullable: true })
+  @Column({ type: 'int', name: 'created_by_id', nullable: true })
   createdById!: number | null;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })

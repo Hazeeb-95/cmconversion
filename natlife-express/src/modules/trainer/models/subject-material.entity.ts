@@ -39,7 +39,8 @@ export class SubjectMaterial {
   @Column({ name: 'file_url', nullable: true })
   fileUrl!: string | null;
 
-  @Column({ name: 'file_size', nullable: true })
+  @Column({ type: 'int', name: 'file_size', nullable: true })
+
   fileSize!: number | null;
 
   @CreateDateColumn({ name: 'uploaded_at', type: 'timestamptz' })

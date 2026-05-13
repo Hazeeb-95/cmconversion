@@ -17,7 +17,7 @@ export class ActivityLog {
   @JoinColumn({ name: 'actor_id' })
   actor!: User | null;
 
-  @Column({ name: 'actor_id', nullable: true })
+ @Column({ type: 'int', name: 'actor_id', nullable: true })
   actorId!: number | null;
 
   @Column()
@@ -26,7 +26,7 @@ export class ActivityLog {
   @Column({ name: 'object_type' })
   objectType!: string;
 
-  @Column({ name: 'object_id', nullable: true })
+  @Column({ type: 'int', name: 'object_id', nullable: true })
   objectId!: number | null;
 
   @Column({ type: 'jsonb', nullable: true })
