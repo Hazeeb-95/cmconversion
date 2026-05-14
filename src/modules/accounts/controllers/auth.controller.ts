@@ -33,14 +33,15 @@ async function sendAuthResponse(
  * Firebase has already verified their phone number.
  */
 export async function firebaseSignupHandler(req: Request, res: Response): Promise<void> {
-  const { idToken, role, email } = req.body;
+  const { idToken, role, phone, email } = req.body;
 
   if (!idToken) throw new AppError(400, 'idToken is required.');
+  if (!phone) throw new AppError(400, 'phone is required.');
   if (role !== RoleName.CM && role !== RoleName.CCM) {
     throw new AppError(400, `role must be '${RoleName.CM}' or '${RoleName.CCM}'.`);
   }
 
-  const result = await authService.firebaseSignup(idToken, role, email);
+  const result = await authService.firebaseSignup(idToken, role, phone, email);
   await sendAuthResponse(res, result, 201);
 }
 

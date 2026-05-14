@@ -74,23 +74,29 @@ export class AuthService {
   async firebaseSignup(
     idToken: string,
     role: RoleName.CM | RoleName.CCM,
+    phone: string,
     email?: string,
   ): Promise<AuthResult> {
     const decoded = await verifyFirebaseToken(idToken);
     if (!decoded) throw new AppError(400, 'Invalid Firebase token.');
 
-    const phone = decoded.phone_number;
-    if (!phone) throw new AppError(400, 'Firebase token must contain a phone number for CM/CCM signup.');
+    // Phone can come from body (explicit) or from the Firebase token claim.
+    // Body takes priority so the frontend can pass it explicitly even when
+    // the token claim is absent (e.g. email-based Firebase auth flow).
+    const resolvedPhone = phone || decoded.phone_number;
+    if (!resolvedPhone) {
+      throw new AppError(400, 'phone is required. Provide it in the request body or use Firebase Phone Auth.');
+    }
 
     // Prevent duplicate signup
-    const existing = await this.userRepo.findOne({ where: { phone } });
+    const existing = await this.userRepo.findOne({ where: { phone: resolvedPhone } });
     if (existing) throw new AppError(409, 'An account with this phone number already exists.');
 
     const roleEntity = await this.roleRepo.findOne({ where: { name: role } });
     if (!roleEntity) throw new AppError(500, `Role ${role} not seeded in database.`);
 
     const user = this.userRepo.create({
-      phone,
+      phone: resolvedPhone,
       email: email ?? decoded.email ?? null,
       phoneVerified: true,   // Firebase already verified the phone
       emailVerified: !!decoded.email,
