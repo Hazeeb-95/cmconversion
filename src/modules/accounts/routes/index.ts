@@ -4,14 +4,21 @@ import { requireAuth } from '../../../middleware/auth';
 import { requireRoles } from '../../../middleware/permissions';
 import { RoleName } from '../../../shared/constants';
 import {
+  // Flow 1 — Firebase (CM/CCM)
+  firebaseSignupHandler,
+  firebaseLoginHandler,
+  // Flow 2 — JWT (Super Admin + invited users)
+  registerSuperAdminHandler,
   loginHandler,
   refreshTokenHandler,
-  sendPhoneOtpHandler,
-  verifyPhoneOtpHandler,
-  firebaseLoginHandler,
+  // Flow 3 — Invitation (ADMIN / TRAINER / FINANCIER)
+  sendBatchInvitesHandler,
   acceptInviteHandler,
   resendInviteHandler,
-  sendBatchInvitesHandler,
+  // OTP
+  sendPhoneOtpHandler,
+  verifyPhoneOtpHandler,
+  // Profile
   getMeHandler,
 } from '../controllers/auth.controller';
 import {
@@ -29,32 +36,63 @@ import {
 
 const router = Router();
 
-const resendInviteRateLimit = rateLimit({
+// ── Rate limiters ─────────────────────────────────────────────────────────
+
+const resendInviteLimit = rateLimit({
   windowMs: 60 * 1000,
   max: 3,
   message: { detail: 'Too many requests. Please wait before trying again.' },
   keyGenerator: (req) => req.ip ?? 'unknown',
 });
 
-// Auth
-router.post('/auth/login/', loginHandler);
-router.post('/auth/token/refresh/', refreshTokenHandler);
-router.post('/auth/phone/otp/send/', sendPhoneOtpHandler);
-router.post('/auth/phone/otp/verify/', verifyPhoneOtpHandler);
-router.post('/firebase/login/', firebaseLoginHandler);
-router.get('/me/', requireAuth, getMeHandler);
+const otpLimit = rateLimit({
+  windowMs: 5 * 60 * 1000,
+  max: 5,
+  message: { detail: 'Too many OTP requests. Please wait 5 minutes.' },
+  keyGenerator: (req) => req.ip ?? 'unknown',
+});
 
-// Invitations
+const loginLimit = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  message: { detail: 'Too many login attempts. Please try again later.' },
+  keyGenerator: (req) => req.ip ?? 'unknown',
+});
+
+// ── Flow 1: CM / CCM — Firebase ──────────────────────────────────────────
+// Mobile users sign up / log in via Firebase Phone Auth.
+
+router.post('/auth/firebase/signup/', firebaseSignupHandler);   // new CM/CCM account
+router.post('/firebase/login/', loginLimit, firebaseLoginHandler);         // existing CM/CCM login
+
+// ── Flow 2: JWT — Super Admin & invited-user login ────────────────────────
+
+router.post('/auth/super-admin/register/', registerSuperAdminHandler); // one-time setup
+router.post('/auth/login/', loginLimit, loginHandler);                 // email + password
+router.post('/auth/token/refresh/', refreshTokenHandler);              // refresh JWT
+
+// ── Flow 3: Invitation — ADMIN / TRAINER / FINANCIER ─────────────────────
+
 router.post(
   '/invite/send/',
   requireAuth,
   requireRoles(RoleName.SUPER_ADMIN, RoleName.ADMIN),
   sendBatchInvitesHandler,
 );
-router.post('/invite/resend/', resendInviteRateLimit, resendInviteHandler);
+router.post('/invite/resend/', resendInviteLimit, resendInviteHandler);
 router.post('/invite/accept/', acceptInviteHandler);
 
-// Users
+// ── OTP (phone verification after signup) ─────────────────────────────────
+
+router.post('/auth/phone/otp/send/', otpLimit, sendPhoneOtpHandler);
+router.post('/auth/phone/otp/verify/', verifyPhoneOtpHandler);
+
+// ── Profile ───────────────────────────────────────────────────────────────
+
+router.get('/me/', requireAuth, getMeHandler);
+
+// ── User management (admin operations) ───────────────────────────────────
+
 router.get(
   '/users/',
   requireAuth,
@@ -80,7 +118,8 @@ router.patch(
   updateUserHandler,
 );
 
-// Regions
+// ── Region management ────────────────────────────────────────────────────
+
 router.get(
   '/regions/',
   requireAuth,
