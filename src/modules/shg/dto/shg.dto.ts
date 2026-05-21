@@ -4,11 +4,17 @@ import {
   IsEnum,
   IsDateString,
   IsBoolean,
+  IsInt,
 } from 'class-validator';
 import { Gender, MaritalStatus, BloodGroup } from '../../../shared/constants';
 import { IsIfsc } from '../../../shared/validators';
 
 export class CreateSHGDto {
+  // Allow ADMIN/SUPER_ADMIN to create a profile on behalf of another user
+  @IsInt()
+  @IsOptional()
+  userId?: number;
+
   @IsDateString()
   @IsOptional()
   dob?: string;

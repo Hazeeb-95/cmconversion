@@ -22,6 +22,12 @@ export class User {
   @Index()
   phone!: string;
 
+  @Column({ type: 'varchar', name: 'first_name', default: '' })
+  firstName!: string;
+
+  @Column({ type: 'varchar', name: 'last_name', default: '' })
+  lastName!: string;
+
   @Column({ type: 'varchar', unique: true, nullable: true })
   @Index()
   email!: string | null;
@@ -96,6 +102,10 @@ export class User {
 
   @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
   updatedAt!: Date;
+
+  get fullName(): string {
+    return `${this.firstName} ${this.lastName}`.trim();
+  }
 
   get roleNames(): string[] {
     return this.roles?.map((r) => r.name) ?? [];

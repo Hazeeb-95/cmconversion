@@ -7,17 +7,18 @@ export enum RoleName {
   CCM = 'CCM',
 }
 
+// Match Django's exact lowercase values
 export enum Gender {
-  MALE = 'MALE',
-  FEMALE = 'FEMALE',
-  OTHER = 'OTHER',
+  MALE = 'male',
+  FEMALE = 'female',
+  OTHER = 'other',
 }
 
 export enum MaritalStatus {
-  SINGLE = 'SINGLE',
-  MARRIED = 'MARRIED',
-  DIVORCED = 'DIVORCED',
-  WIDOWED = 'WIDOWED',
+  SINGLE = 'single',
+  MARRIED = 'married',
+  DIVORCED = 'divorced',
+  WIDOWED = 'widowed',
 }
 
 export enum BloodGroup {
@@ -31,27 +32,33 @@ export enum BloodGroup {
   O_NEGATIVE = 'O-',
 }
 
+// Full document types including all education certificates
 export enum DocumentType {
-  AADHAR_FRONT = 'AADHAR_FRONT',
-  AADHAR_BACK = 'AADHAR_BACK',
-  PAN = 'PAN',
-  CERTIFICATES = 'CERTIFICATES',
-  EXPERIENCE = 'EXPERIENCE',
-  BANK_DOC = 'BANK_DOC',
-  OTHER = 'OTHER',
+  AADHAR_FRONT = 'aadhar_front',
+  AADHAR_BACK = 'aadhar_back',
+  PAN = 'pan',
+  TENTH_CERTIFICATE = 'tenth_certificate',
+  TWELFTH_CERTIFICATE = 'twelfth_certificate',
+  DIPLOMA = 'diploma',
+  BACHELOR_DEGREE = 'bachelor_certificate',
+  MASTERS_DEGREE = 'master_certificate',
+  PHD_DEGREE = 'phd_certificate',
+  EXPERIENCE_CERTIFICATE = 'experience_certificate',
+  BANK_DOC = 'bank_doc',
+  OTHER = 'other',
 }
 
 export enum DocumentStatus {
-  PENDING = 'PENDING',
-  APPROVED = 'APPROVED',
-  REJECTED = 'REJECTED',
-  REUPLOADED = 'REUPLOADED',
+  PENDING = 'pending',
+  APPROVED = 'approved',
+  REJECTED = 'rejected',
+  REUPLOADED = 'reuploaded',
 }
 
 export enum RegistrationStatus {
-  REGISTERED = 'REGISTERED',
-  UNREGISTERED = 'UNREGISTERED',
-  IN_PROCESS = 'IN_PROCESS',
+  REGISTERED = 'registered',
+  UNREGISTERED = 'unregistered',
+  IN_PROCESS = 'in_process',
 }
 
 export enum ApplicationStatus {
@@ -90,7 +97,6 @@ export enum MaterialDocumentType {
   OTHER = 'OTHER',
 }
 
-// Valid status transitions
 export const APPLICATION_STATUS_TRANSITIONS: Record<ApplicationStatus, ApplicationStatus[]> = {
   [ApplicationStatus.SUBMITTED]: [ApplicationStatus.UNDER_REVIEW, ApplicationStatus.REJECTED],
   [ApplicationStatus.UNDER_REVIEW]: [ApplicationStatus.ASSIGNED, ApplicationStatus.REJECTED],
@@ -102,12 +108,12 @@ export const APPLICATION_STATUS_TRANSITIONS: Record<ApplicationStatus, Applicati
 };
 
 export const MAX_FILE_SIZES = {
-  IMAGE: 3 * 1024 * 1024,       // 3MB
-  DOCUMENT: 5 * 1024 * 1024,    // 5MB
-  MATERIAL: 30 * 1024 * 1024,   // 30MB
+  IMAGE: 3 * 1024 * 1024,
+  DOCUMENT: 5 * 1024 * 1024,
+  MATERIAL: 30 * 1024 * 1024,
 };
 
-export const OTP_TTL_SECONDS = 300;       // 5 minutes
+export const OTP_TTL_SECONDS = 300;
 export const OTP_MAX_ATTEMPTS = 5;
 export const OTP_LENGTH = 6;
 

@@ -24,18 +24,23 @@ export class Document {
   @Column({ type: 'enum', enum: DocumentType, name: 'document_type' })
   documentType!: DocumentType;
 
-  @Column({ type: 'varchar', name: 'file_key' })
+  // S3 key (production) or local path (development)
+  @Column({ type: 'varchar', length: 500, name: 'file_key' })
   fileKey!: string;
 
-  @Column({ type: 'varchar', name: 'file_url' })
+  // Public accessible URL
+  @Column({ type: 'varchar', length: 1000, name: 'file_url' })
   fileUrl!: string;
 
   @Column({ type: 'int', name: 'file_size', nullable: true })
   fileSize!: number | null;
 
+  @Column({ type: 'varchar', name: 'original_name', nullable: true })
+  originalName!: string | null;
+
   @Column({ type: 'enum', enum: DocumentStatus, default: DocumentStatus.PENDING })
   status!: DocumentStatus;
 
-  @CreateDateColumn({ name: 'uploaded_at', type: 'timestamptz' })
+  @CreateDateColumn({ type: 'timestamptz', name: 'uploaded_at' })
   uploadedAt!: Date;
 }

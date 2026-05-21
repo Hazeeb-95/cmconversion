@@ -21,41 +21,47 @@ export class SHG {
   @Column({ type: 'int', name: 'user_id' })
   userId!: number;
 
+  // ── Personal Info ──────────────────────────────────────────────────────────
+
   @Column({ type: 'date', nullable: true })
   dob!: Date | null;
 
-  @Column({ type: 'enum', enum: Gender, nullable: true })
-  gender!: Gender | null;
+  @Column({ type: 'enum', enum: Gender, default: Gender.MALE })
+  gender!: Gender;
 
-  @Column({ type: 'enum', enum: MaritalStatus, name: 'marital_status', nullable: true })
-  maritalStatus!: MaritalStatus | null;
+  @Column({ type: 'enum', enum: MaritalStatus, name: 'marital_status', default: MaritalStatus.SINGLE })
+  maritalStatus!: MaritalStatus;
 
   @Column({ type: 'enum', enum: BloodGroup, name: 'blood_group', nullable: true })
   bloodGroup!: BloodGroup | null;
 
-  @Column({ type: 'varchar', nullable: true })
+  @Column({ type: 'varchar', length: 100, nullable: true })
   language!: string | null;
 
-  @Column({ type: 'varchar', name: 'address_line_1', nullable: true })
+  // ── Address Info ───────────────────────────────────────────────────────────
+
+  @Column({ type: 'varchar', length: 255, name: 'address_line_1', nullable: true })
   addressLine1!: string | null;
 
-  @Column({ type: 'varchar', name: 'address_line_2', nullable: true })
+  @Column({ type: 'varchar', length: 255, name: 'address_line_2', nullable: true, default: '' })
   addressLine2!: string | null;
 
-  @Column({ type: 'varchar', nullable: true })
+  @Column({ type: 'varchar', length: 100, nullable: true })
   district!: string | null;
 
-  @Column({ type: 'varchar', nullable: true })
+  @Column({ type: 'varchar', length: 255, nullable: true })
   village!: string | null;
 
-  @Column({ type: 'varchar', nullable: true })
+  @Column({ type: 'varchar', length: 100, nullable: true })
   state!: string | null;
 
-  @Column({ type: 'varchar', nullable: true })
+  @Column({ type: 'varchar', length: 100, nullable: true, default: 'IN' })
   country!: string | null;
 
-  @Column({ type: 'varchar', nullable: true, length: 6 })
+  @Column({ type: 'varchar', length: 6, nullable: true })
   pincode!: string | null;
+
+  // ── Status ─────────────────────────────────────────────────────────────────
 
   @Column({
     type: 'enum',
@@ -68,6 +74,6 @@ export class SHG {
   @Column({ type: 'boolean', name: 'is_submitted', default: false })
   isSubmitted!: boolean;
 
-  @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
+  @CreateDateColumn({ type: 'timestamptz', name: 'created_at' })
   createdAt!: Date;
 }

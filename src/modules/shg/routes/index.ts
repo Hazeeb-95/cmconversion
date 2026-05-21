@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { requireAuth } from '../../../middleware/auth';
 import { requireRoles } from '../../../middleware/permissions';
-import { RoleName, DocumentType } from '../../../shared/constants';
+import { RoleName, DocumentType, DocumentStatus } from '../../../shared/constants';
 import { SHGService } from '../services/shg.service';
 import { AuthenticatedRequest } from '../../../shared/types';
 import { documentUpload } from '../../../config/s3';
@@ -11,13 +11,15 @@ import { AppError } from '../../../middleware/error-handler';
 const router = Router();
 const shgService = new SHGService();
 
-// List SHG profiles (SUPER_ADMIN only)
+// ── SHG Profiles ────────────────────────────────────────────────────────────
+
+// List all SHG profiles (SUPER_ADMIN only)
 router.get(
   '/app/cm-ccm/',
   requireAuth,
   requireRoles(RoleName.SUPER_ADMIN),
-  async (_req: Request, res: Response) => {
-    const user = (_req as AuthenticatedRequest).user;
+  async (req: Request, res: Response) => {
+    const user = (req as AuthenticatedRequest).user;
     const profiles = await shgService.listSHG(user);
     res.json({ count: profiles.length, results: profiles });
   },
@@ -30,7 +32,7 @@ router.post(
   requireRoles(RoleName.SUPER_ADMIN, RoleName.ADMIN, RoleName.CM, RoleName.CCM),
   async (req: Request, res: Response) => {
     const user = (req as AuthenticatedRequest).user;
-    const shg = await shgService.createSHG(user.id, req.body);
+    const shg = await shgService.createSHG(user, req.body);
     res.status(201).json(shg);
   },
 );
@@ -48,7 +50,7 @@ router.get(
   },
 );
 
-// Update SHG profile
+// Update SHG profile (partial)
 router.patch(
   '/app/cm-ccm/:id/',
   requireAuth,
@@ -58,6 +60,22 @@ router.patch(
     const id = parseInt(req.params.id, 10);
     const shg = await shgService.updateSHG(id, req.body, user);
     res.json(shg);
+  },
+);
+
+// ── Documents ────────────────────────────────────────────────────────────────
+
+// List documents for a SHG profile
+router.get(
+  '/app/documents/',
+  requireAuth,
+  requireRoles(RoleName.SUPER_ADMIN, RoleName.ADMIN, RoleName.FINANCIER, RoleName.CM, RoleName.CCM),
+  async (req: Request, res: Response) => {
+    const user = (req as AuthenticatedRequest).user;
+    const shgId = parseInt(req.query.shgId as string, 10);
+    if (!shgId) throw new AppError(400, 'shgId query parameter is required.');
+    const docs = await shgService.listDocuments(shgId, user);
+    res.json({ count: docs.length, results: docs });
   },
 );
 
@@ -73,13 +91,14 @@ router.post(
 
     if (!req.file) throw new AppError(400, 'No file provided.');
     if (!documentType || !Object.values(DocumentType).includes(documentType)) {
-      throw new AppError(400, 'Invalid or missing documentType.');
+      throw new AppError(400, `Invalid or missing documentType. Valid values: ${Object.values(DocumentType).join(', ')}`);
     }
     if (!shgId) throw new AppError(400, 'shgId is required.');
 
     const file = req.file as Express.MulterS3.File;
-    const fileKey = file.key || (file as Express.Multer.File & { filename: string }).filename;
-    const fileUrl = file.location || getMediaUrl(fileKey);
+    const fileKey = (file as any).key || (file as any).filename;
+    const fileUrl = (file as any).location || getMediaUrl(fileKey);
+    const originalName = req.file.originalname;
 
     const doc = await shgService.uploadDocument(
       parseInt(shgId, 10),
@@ -87,8 +106,29 @@ router.post(
       fileKey,
       fileUrl,
       req.file.size,
+      originalName,
+      user,
     );
     res.status(201).json(doc);
+  },
+);
+
+// Update document status (ADMIN/SUPER_ADMIN only)
+router.patch(
+  '/app/documents/:id/status/',
+  requireAuth,
+  requireRoles(RoleName.SUPER_ADMIN, RoleName.ADMIN),
+  async (req: Request, res: Response) => {
+    const user = (req as AuthenticatedRequest).user;
+    const docId = parseInt(req.params.id, 10);
+    const { status } = req.body;
+
+    if (!status || !Object.values(DocumentStatus).includes(status)) {
+      throw new AppError(400, `Invalid status. Valid values: ${Object.values(DocumentStatus).join(', ')}`);
+    }
+
+    const doc = await shgService.updateDocumentStatus(docId, status as DocumentStatus, user);
+    res.json(doc);
   },
 );
 
@@ -104,30 +144,37 @@ router.delete(
   },
 );
 
-// Bank details
+// ── Bank Details ─────────────────────────────────────────────────────────────
+
+// Get bank details for a SHG
 router.get(
   '/app/cm-ccm/:shgId/bank-details/',
   requireAuth,
   requireRoles(RoleName.SUPER_ADMIN, RoleName.ADMIN, RoleName.FINANCIER, RoleName.CM, RoleName.CCM),
   async (req: Request, res: Response) => {
+    const user = (req as AuthenticatedRequest).user;
     const shgId = parseInt(req.params.shgId, 10);
-    const bank = await shgService.getBankDetails(shgId);
+    const bank = await shgService.getBankDetails(shgId, user);
     res.json(bank ?? {});
   },
 );
 
+// Create or update bank details
 router.put(
   '/app/cm-ccm/:shgId/bank-details/',
   requireAuth,
   requireRoles(RoleName.SUPER_ADMIN, RoleName.ADMIN, RoleName.CM, RoleName.CCM),
   async (req: Request, res: Response) => {
+    const user = (req as AuthenticatedRequest).user;
     const shgId = parseInt(req.params.shgId, 10);
-    const bank = await shgService.upsertBankDetails(shgId, req.body);
+    const bank = await shgService.upsertBankDetails(shgId, req.body, user);
     res.json(bank);
   },
 );
 
-// SHG-specific constants
+// ── Constants ────────────────────────────────────────────────────────────────
+
+// Enum constants for frontend dropdowns
 router.get('/constants/', (_req: Request, res: Response) => {
   const { Gender, MaritalStatus, BloodGroup, DocumentType, DocumentStatus, RegistrationStatus } =
     require('../../../shared/constants');
