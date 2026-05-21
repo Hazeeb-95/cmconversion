@@ -10,7 +10,8 @@
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli",
     "migration:generate": "npm run typeorm -- migration:generate",
     "migration:run": "npm run typeorm -- migration:run",
-    "migration:revert": "npm run typeorm -- migration:revert"
+    "migration:revert": "npm run typeorm -- migration:revert",
+    "seed:roles": "ts-node --transpile-only src/seeds/roles.seed.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.600.0",

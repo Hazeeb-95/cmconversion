@@ -102,7 +102,7 @@ export class UserService {
     return this.userRepo.save(user);
   }
 
-  async sendBatchInvites(
+   async sendBatchInvites(
     invites: InviteUserDto[],
     invitedBy: User,
   ): Promise<{ created: User[]; skipped: string[] }> {
@@ -151,7 +151,8 @@ export class UserService {
     return { created, skipped };
   }
 
-  async serializeUser(user: User): Promise<Record<string, unknown>> {
+
+ async serializeUser(user: User): Promise<Record<string, unknown>> {
     // Gather computed fields
     const roleNames = user.roleNames;
     const hasPassword = !!user.passwordHash;

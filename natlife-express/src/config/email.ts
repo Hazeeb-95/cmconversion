@@ -4,7 +4,10 @@ let _resend: Resend | null = null;
 
 export function getResend(): Resend {
   if (!_resend) {
-    _resend = new Resend(process.env.RESEND_API_KEY);
+    const key = process.env.NODE_ENV === 'development'
+      ? (process.env.RESEND_TEST_API_KEY ?? process.env.RESEND_API_KEY)
+      : process.env.RESEND_API_KEY;
+    _resend = new Resend(key);
   }
   return _resend;
 }

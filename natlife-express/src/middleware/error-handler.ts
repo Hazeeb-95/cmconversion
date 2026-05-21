@@ -52,6 +52,12 @@ export function globalErrorHandler(
     return;
   }
 
+  // TypeORM foreign key violation
+  if ((err as NodeJS.ErrnoException).code === '23503') {
+    res.status(400).json({ detail: 'Related record does not exist.' });
+    return;
+  }
+
   console.error('Unhandled error:', err);
   res.status(500).json({ detail: 'Internal server error.' });
 }

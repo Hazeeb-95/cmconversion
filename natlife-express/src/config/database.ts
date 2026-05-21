@@ -26,10 +26,7 @@ import { Contact } from '../modules/website/models/contact.entity';
 export const AppDataSource = new DataSource({
   type: 'postgres',
   url: process.env.DATABASE_URL,
-  ssl:
-    process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging'
-      ? { rejectUnauthorized: false }
-      : false,
+  ssl: { rejectUnauthorized: false },
   entities: [
     User,
     Role,
