@@ -88,6 +88,11 @@ export class UserService {
     return this.userRepo.save(user);
   }
 
+  async deleteUser(id: number): Promise<void> {
+    const user = await this.getUser(id);
+    await this.userRepo.remove(user);
+  }
+
   async updateUser(id: number, dto: UpdateUserDto): Promise<User> {
     const user = await this.getUser(id);
 

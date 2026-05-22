@@ -26,12 +26,14 @@ import {
   getUserHandler,
   createUserHandler,
   updateUserHandler,
+  deleteUserHandler,
 } from '../controllers/user.controller';
 import {
   listRegionsHandler,
   getRegionHandler,
   createRegionHandler,
   updateRegionHandler,
+  deleteRegionHandler,
 } from '../controllers/region.controller';
 
 const router = Router();
@@ -111,11 +113,23 @@ router.get(
   requireRoles(RoleName.SUPER_ADMIN, RoleName.ADMIN, RoleName.TRAINER),
   getUserHandler,
 );
+router.put(
+  '/users/:id/',
+  requireAuth,
+  requireRoles(RoleName.SUPER_ADMIN, RoleName.ADMIN),
+  updateUserHandler,
+);
 router.patch(
   '/users/:id/',
   requireAuth,
   requireRoles(RoleName.SUPER_ADMIN, RoleName.ADMIN),
   updateUserHandler,
+);
+router.delete(
+  '/users/:id/',
+  requireAuth,
+  requireRoles(RoleName.SUPER_ADMIN),
+  deleteUserHandler,
 );
 
 // ── Region management ────────────────────────────────────────────────────
@@ -138,11 +152,23 @@ router.get(
   requireRoles(RoleName.SUPER_ADMIN, RoleName.ADMIN),
   getRegionHandler,
 );
+router.put(
+  '/regions/:id/',
+  requireAuth,
+  requireRoles(RoleName.SUPER_ADMIN),
+  updateRegionHandler,
+);
 router.patch(
   '/regions/:id/',
   requireAuth,
   requireRoles(RoleName.SUPER_ADMIN),
   updateRegionHandler,
+);
+router.delete(
+  '/regions/:id/',
+  requireAuth,
+  requireRoles(RoleName.SUPER_ADMIN),
+  deleteRegionHandler,
 );
 
 export default router;

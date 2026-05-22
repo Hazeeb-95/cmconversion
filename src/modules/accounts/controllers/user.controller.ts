@@ -31,3 +31,9 @@ export async function updateUserHandler(req: Request, res: Response): Promise<vo
   const serialized = await userService.serializeUser(user);
   res.json(serialized);
 }
+
+export async function deleteUserHandler(req: Request, res: Response): Promise<void> {
+  const id = parseInt(req.params.id, 10);
+  await userService.deleteUser(id);
+  res.status(204).send();
+}

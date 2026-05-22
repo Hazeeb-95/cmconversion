@@ -24,3 +24,9 @@ export async function updateRegionHandler(req: Request, res: Response): Promise<
   const region = await regionService.updateRegion(id, req.body);
   res.json(region);
 }
+
+export async function deleteRegionHandler(req: Request, res: Response): Promise<void> {
+  const id = parseInt(req.params.id, 10);
+  await regionService.deleteRegion(id);
+  res.status(204).send();
+}

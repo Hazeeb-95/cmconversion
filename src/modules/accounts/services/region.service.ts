@@ -57,6 +57,11 @@ export class RegionService {
     await this.pincodeRepo.save(entities);
   }
 
+  async deleteRegion(id: number): Promise<void> {
+    const region = await this.getRegion(id);
+    await this.regionRepo.remove(region);
+  }
+
   async listPincodes(regionId: number): Promise<Pincode[]> {
     return this.pincodeRepo.find({ where: { regionId } });
   }

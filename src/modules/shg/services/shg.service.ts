@@ -165,6 +165,19 @@ export class SHGService {
     await this.userRepo.save(user);
   }
 
+  // ── Delete ─────────────────────────────────────────────────────────────────
+
+  async deleteSHG(id: number, requestingUser: User): Promise<void> {
+    const shg = await this.shgRepo.findOne({ where: { id } });
+    if (!shg) throw new AppError(404, 'SHG profile not found.');
+
+    if (!requestingUser.hasRole(RoleName.SUPER_ADMIN)) {
+      throw new AppError(403, 'Only SUPER_ADMIN can delete SHG profiles.');
+    }
+
+    await this.shgRepo.remove(shg);
+  }
+
   // ── Documents ──────────────────────────────────────────────────────────────
 
   async uploadDocument(
@@ -204,7 +217,19 @@ export class SHGService {
     return this.documentRepo.save(doc);
   }
 
-  async listDocuments(shgId: number, requestingUser: User): Promise<Document[]> {
+  async listDocuments(shgId: number, requestingUser: User, docId?: number): Promise<Document[]> {
+    if (docId) {
+      const doc = await this.documentRepo.findOne({ where: { id: docId } });
+      if (!doc) return [];
+      const shg = await this.shgRepo.findOne({ where: { id: doc.shgId } });
+      if (!shg) return [];
+      const roles = requestingUser.roleNames;
+      const canView = [RoleName.SUPER_ADMIN, RoleName.ADMIN, RoleName.FINANCIER].some((r) => roles.includes(r));
+      const isOwner = shg.userId === requestingUser.id;
+      if (!canView && !isOwner) throw new AppError(403, 'You do not have permission to view this document.');
+      return [doc];
+    }
+
     const shg = await this.shgRepo.findOne({ where: { id: shgId } });
     if (!shg) throw new AppError(404, 'SHG profile not found.');
 

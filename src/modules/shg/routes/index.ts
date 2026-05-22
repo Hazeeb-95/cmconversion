@@ -50,7 +50,18 @@ router.get(
   },
 );
 
-// Update SHG profile (partial)
+// Update SHG profile (full or partial)
+router.put(
+  '/app/cm-ccm/:id/',
+  requireAuth,
+  requireRoles(RoleName.SUPER_ADMIN, RoleName.ADMIN, RoleName.CM, RoleName.CCM),
+  async (req: Request, res: Response) => {
+    const user = (req as AuthenticatedRequest).user;
+    const id = parseInt(req.params.id, 10);
+    const shg = await shgService.updateSHG(id, req.body, user);
+    res.json(shg);
+  },
+);
 router.patch(
   '/app/cm-ccm/:id/',
   requireAuth,
@@ -60,6 +71,19 @@ router.patch(
     const id = parseInt(req.params.id, 10);
     const shg = await shgService.updateSHG(id, req.body, user);
     res.json(shg);
+  },
+);
+
+// Delete SHG profile (SUPER_ADMIN only)
+router.delete(
+  '/app/cm-ccm/:id/',
+  requireAuth,
+  requireRoles(RoleName.SUPER_ADMIN),
+  async (req: Request, res: Response) => {
+    const user = (req as AuthenticatedRequest).user;
+    const id = parseInt(req.params.id, 10);
+    await shgService.deleteSHG(id, user);
+    res.status(204).send();
   },
 );
 
@@ -113,9 +137,22 @@ router.post(
   },
 );
 
-// Update document status (ADMIN/SUPER_ADMIN only)
+// Retrieve single document
+router.get(
+  '/app/documents/:id/',
+  requireAuth,
+  requireRoles(RoleName.SUPER_ADMIN, RoleName.ADMIN, RoleName.FINANCIER, RoleName.CM, RoleName.CCM),
+  async (req: Request, res: Response) => {
+    const user = (req as AuthenticatedRequest).user;
+    const docs = await shgService.listDocuments(0, user, parseInt(req.params.id, 10));
+    if (!docs.length) throw new AppError(404, 'Document not found.');
+    res.json(docs[0]);
+  },
+);
+
+// Update document (partial) — status field changes go here
 router.patch(
-  '/app/documents/:id/status/',
+  '/app/documents/:id/',
   requireAuth,
   requireRoles(RoleName.SUPER_ADMIN, RoleName.ADMIN),
   async (req: Request, res: Response) => {

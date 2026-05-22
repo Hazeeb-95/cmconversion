@@ -44,7 +44,22 @@ router.get(
   },
 );
 
-// Update application (ADMIN full update, FINANCIER/TRAINER partial)
+// Update application — full (PUT) or partial (PATCH)
+router.put(
+  '/app/:id/',
+  requireAuth,
+  requireRoles(RoleName.SUPER_ADMIN, RoleName.ADMIN),
+  async (req: Request, res: Response) => {
+    const user = (req as AuthenticatedRequest).user;
+    const application = await appService.updateApplication(
+      parseInt(req.params.id, 10),
+      req.body,
+      user,
+    );
+    res.json(application);
+  },
+);
+
 router.patch(
   '/app/:id/',
   requireAuth,
